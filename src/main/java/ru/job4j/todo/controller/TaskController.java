@@ -1,0 +1,144 @@
+package ru.job4j.todo.controller;
+
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import ru.job4j.todo.model.Task;
+import ru.job4j.todo.service.TaskService;
+
+import java.util.stream.Collectors;
+
+@Controller
+@AllArgsConstructor
+public class TaskController {
+    /**
+     * Работа с TaskStore через промежуточный слой TaskService
+     */
+    private final TaskService taskService;
+
+    /**
+     * Обрабатывает переход на all.html
+     * Используется Thymeleaf для поиска объектов,
+     * которые нужны отобразить на виде.
+     * @return String
+     */
+    @GetMapping("/all")
+    public String all(Model model) {
+        model.addAttribute("tasks", taskService.findAllTasks());
+        return "all";
+    }
+
+    /**
+     * Обрабатывает переход на done.html
+     * @param model
+     * @return String
+     */
+    @GetMapping("/done")
+    public String done(Model model) {
+        model.addAttribute("tasks", taskService.findAllTasks()
+                .stream()
+                .filter(t -> t.getDone())
+                .collect(Collectors.toList())
+        );
+        return "done";
+    }
+
+    /**
+     * Обрабатывает переход на notDone.html
+     * @param model
+     * @return String
+     */
+    @GetMapping("/notDone")
+    public String notDone(Model model) {
+        model.addAttribute("tasks", taskService.findAllTasks()
+                .stream()
+                .filter(t -> !(t.getDone()))
+                .collect(Collectors.toList())
+        );
+        return "notDone";
+    }
+
+    /**
+     * Обрабатывает переход на addTask.html
+     * @param model
+     * @return String
+     */
+    @GetMapping("/formAddTask")
+    public String addTask(Model model) {
+        model.addAttribute("task", new Task());
+        return "addTask";
+    }
+
+    /**
+     * Обрабатывает добавление данных в task
+     * и их сохранение в store.
+     * @param task
+     * @return String
+     */
+    @PostMapping("/createTask")
+    public String createTask(@ModelAttribute Task task) {
+        taskService.addTask(task);
+        return "redirect:/all";
+    }
+
+    /**
+     * Обработка действий книпки удалить.
+     * Удаление, выбраного, task по id.
+     * @param id id выбраного task
+     * @return String
+     */
+    @PostMapping("/deleteTask/{taskId}")
+    public String deleteTask(@PathVariable("taskId") int id) {
+        taskService.deleteTask(id);
+        return "redirect:/all";
+    }
+
+    @GetMapping("/detailed/{taskId}")
+    public String detailed(Model model,
+                       @PathVariable("taskId") int id) {
+        model.addAttribute("task", taskService.findTaskById(id));
+        return "detailed";
+    }
+
+    /**
+     * Обрабатывает переход на edit.html
+     * @param model
+     * @param id
+     * @return String
+     */
+    @GetMapping("/formEdit/{taskId}")
+    public String edit(Model model,
+                       @PathVariable("taskId") int id) {
+        model.addAttribute("task", taskService.findTaskById(id));
+        return "edit";
+    }
+
+    /**
+     * Обрабатывает действие на сервере
+     * редактирование task на edit.html
+     * @param task
+     * @return String
+     */
+    @PostMapping("/editTask")
+    public String edit(@ModelAttribute Task task) {
+        taskService.updateTask(task.getId(), task);
+        return "redirect:/detailed/" + String.valueOf(task.getId());
+    }
+
+    /**
+     * Обработка действий книпки завершить.
+     * Переводит task в состояние выполнено
+     * путем замены флага в done, на true.
+     * @param id id выбраного task
+     * @return String
+     */
+    @PostMapping("/completeTask/{taskId}")
+    public String completeTask(@PathVariable("taskId") int id) {
+        taskService.completeTask(id);
+        return "redirect:/all";
+    }
+}

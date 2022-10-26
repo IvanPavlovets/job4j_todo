@@ -49,10 +49,14 @@
             <tbody>
             <tr th:each="task: ${tasks}">
                 <td th:text="${task.id}"/>
+                <td>
                     <a th:href="@{|/detailed/${task.id}|}" th:text="${task.description}"/>
                 </td>
                 <td>
                     <span th:text="${task.created}"/>
+                </td>
+                <td class="table-success" th:if="${task.done}">
+                    Выполнено!
                 </td>
                 <td class="table-warning" th:if="${!task.done}">
                     Еще не сделано.
