@@ -1,20 +1,8 @@
-![](https://img.shields.io/badge/Java-%3E%3D%208-orange)
-![](https://img.shields.io/badge/Maven-3-red)
-![](https://img.shields.io/badge/Spring%20boot-%202.5.2-green)
-![](https://img.shields.io/badge/-Bootstrap-blueviolet)
-![](https://img.shields.io/badge/-Thymeleaf-darkgreen)
-![](https://img.shields.io/badge/PostgreSQL-%3E%3D%209-informational)
-![](https://img.shields.io/badge/-JDBC-blue)
-![](https://img.shields.io/badge/-H2%20-blueviolet)
-![](https://img.shields.io/badge/-Liquibase-blue)
-![](https://img.shields.io/badge/JUnit-%3E%3D%204-yellowgreen)
-![](https://img.shields.io/badge/-Mockito-brightgreen)
-![](https://img.shields.io/badge/-checkstyle-lightgrey)
-
 # job4j_todo
 
  - [О проекте]()
  - [Технологии]() 
+ - [Запуск приложения]() 
  - [Как использовать]()  
 
 О проекте
@@ -23,14 +11,27 @@
 
 Технологии
 =
- * Frontend - **HTML**, **CSS**, **BOOTSTRAP**, **Thymeleaf**;
- * Backend - **Java 12**, **JDBC**, **Spring Boot**;
- * Сборщик проектов - **Maven**;
- * СУБД - **PostgreSQL**, **H2**;
- * библиотека для управления обновлений схем БД - **Liquibase**;
- * библиотека для модульного тестирования - **JUnit**;
- * библиотеки для тестирования - **JUnit**, **Mockito**;
- * Инструмент анализа стиля кода - **Checkstyle**;
+![https://www.oracle.com/java/](https://img.shields.io/badge/Java-12-orange)
+![https://spring.io/blog/2022/08/18/spring-boot-2-7-3-available-now](https://img.shields.io/badge/Spring%20Boot-2.7.3-green)
+![https://getbootstrap.com/](https://img.shields.io/badge/Bootstrap-style-blueviolet)
+![https://www.thymeleaf.org/](https://img.shields.io/badge/Thymeleaf-3.0.15-darkgreen)
+![https://www.postgresql.org/](https://img.shields.io/badge/PostgreSQL-42.4.2-informational)
+![https://www.h2database.com/html/main.html](https://img.shields.io/badge/-H2-2.1.214-blueviolet)
+![https://www.liquibase.org/](https://img.shields.io/badge/-Liquibase-4.15.0-blue)
+![](https://img.shields.io/badge/JUnit-4.13.2-yellowgreen)
+![https://site.mockito.org/](https://img.shields.io/badge/-Mockito-4.0.0-brightgreen)
+![https://checkstyle.sourceforge.io/](https://img.shields.io/badge/-checkstyle-3.1.2-lightgrey)
+
+Запуск приложения
+=
+1. Создать бд:<br>
+
+create database todo;<br>
+
+2. Запуск приложения с maven. Перейдите в корень проекта через командную строку и выполните команды:<br>
+
+mvn clean install<br>
+mvn spring-boot:run<br>
 
 Как использовать
 =
