@@ -26,12 +26,12 @@
 =
 1. Создать бд:<br>
 
-create database todo;
+- create database todo;
 
 2. Запуск приложения с maven. Перейдите в корень проекта через командную строку и выполните команды:<br>
 
-mvn clean install
-mvn spring-boot:run
+- mvn clean install
+- mvn spring-boot:run
 
 Как использовать
 =
