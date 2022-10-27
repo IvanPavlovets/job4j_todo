@@ -20,7 +20,7 @@
 ![](https://img.shields.io/badge/Liquibase-4.15.0-blue)
 ![](https://img.shields.io/badge/JUnit-4.13.2-yellowgreen)
 ![](https://img.shields.io/badge/Mockito-4.0.0-brightgreen)
-![](https://img.shields.io/badge/checkstyle-3.1.2-lightgrey)
+[![](https://img.shields.io/badge/checkstyle-3.1.2-lightgrey)](https://checkstyle.sourceforge.io/)
 
 Запуск приложения
 =
