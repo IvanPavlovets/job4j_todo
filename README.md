@@ -11,16 +11,16 @@
 
 Технологии
 =
-![https://www.oracle.com/java/](https://img.shields.io/badge/Java-12-orange)
-![https://spring.io/blog/2022/08/18/spring-boot-2-7-3-available-now](https://img.shields.io/badge/Spring%20Boot-2.7.3-green)
-![https://getbootstrap.com/](https://img.shields.io/badge/Bootstrap-style-blueviolet)
-![https://www.thymeleaf.org/](https://img.shields.io/badge/Thymeleaf-3.0.15-darkgreen)
-![https://www.postgresql.org/](https://img.shields.io/badge/PostgreSQL-42.4.2-informational)
-![https://www.h2database.com/html/main.html](https://img.shields.io/badge/-H2-2.1.214-blueviolet)
-![https://www.liquibase.org/](https://img.shields.io/badge/-Liquibase-4.15.0-blue)
+![](https://img.shields.io/badge/Java-12-orange)
+![](https://img.shields.io/badge/Spring%20Boot-2.7.3-green)
+![](https://img.shields.io/badge/Bootstrap-style-blueviolet)
+![](https://img.shields.io/badge/Thymeleaf-3.0.15-darkgreen)
+![](https://img.shields.io/badge/PostgreSQL-42.4.2-informational)
+![](https://img.shields.io/badge/-H2-2.1.214-blueviolet)
+![](https://img.shields.io/badge/-Liquibase-4.15.0-blue)
 ![](https://img.shields.io/badge/JUnit-4.13.2-yellowgreen)
-![https://site.mockito.org/](https://img.shields.io/badge/-Mockito-4.0.0-brightgreen)
-![](https://img.shields.io/badge/-checkstyle-3.1.2-lightgrey)https://checkstyle.sourceforge.io/
+![](https://img.shields.io/badge/-Mockito-4.0.0-brightgreen)
+![](https://img.shields.io/badge/-checkstyle-3.1.2-lightgrey)
 
 Запуск приложения
 =
