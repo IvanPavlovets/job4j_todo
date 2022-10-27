@@ -16,11 +16,11 @@
 ![](https://img.shields.io/badge/Bootstrap-style-blueviolet)
 ![](https://img.shields.io/badge/Thymeleaf-3.0.15-darkgreen)
 ![](https://img.shields.io/badge/PostgreSQL-42.4.2-informational)
-![](https://img.shields.io/badge/-H2-2.1.214-blueviolet)
-![](https://img.shields.io/badge/-Liquibase-4.15.0-blue)
+![](https://img.shields.io/badge/H2-2.1.214-blueviolet)
+![](https://img.shields.io/badge/Liquibase-4.15.0-blue)
 ![](https://img.shields.io/badge/JUnit-4.13.2-yellowgreen)
-![](https://img.shields.io/badge/-Mockito-4.0.0-brightgreen)
-![](https://img.shields.io/badge/-checkstyle-3.1.2-lightgrey)
+![](https://img.shields.io/badge/Mockito-4.0.0-brightgreen)
+![](https://img.shields.io/badge/checkstyle-3.1.2-lightgrey)
 
 Запуск приложения
 =
