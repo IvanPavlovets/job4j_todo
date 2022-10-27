@@ -37,7 +37,7 @@ public class TaskService {
      * поля из переданого task.
      * @param task
      */
-    public boolean updateTask(Integer id, Task task) {
+    public boolean updateTask(int id, Task task) {
         return taskStore.update(id, task);
     }
 
@@ -46,7 +46,7 @@ public class TaskService {
      * путем замены флага в done, на true.
      * @param id
      */
-    public boolean completeTask(Integer id) {
+    public boolean completeTask(int id) {
         return taskStore.complete(id);
     }
 
@@ -55,7 +55,7 @@ public class TaskService {
      * @param id
      * @return
      */
-    public boolean deleteTask(Integer id) {
+    public boolean deleteTask(int id) {
         return taskStore.delete(id);
     }
 
@@ -65,6 +65,22 @@ public class TaskService {
      */
     public List<Task> findAllTasks() {
         return taskStore.findAll();
+    }
+
+    /**
+     * Достает все task c флагом true
+     * @return List<Task>
+     */
+    public List<Task> findCompletedTask() {
+        return taskStore.findCompleted();
+    }
+
+    /**
+     * Достает все task c флагом false
+     * @return List<Task>
+     */
+    public List<Task> findNotCompletedTask() {
+        return taskStore.findNotCompleted();
     }
 
     /**

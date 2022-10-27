@@ -5,15 +5,17 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-@Entity /* указывает что модель можно сохранить в БД */
-@Table(name = "tasks") /* указывает на таблицу(схему) в бд*/
+@Entity
+@Table(name = "tasks")
 @Data
 public class Task {
-    @Id /* указывает какое поле в модели первичный ключ */
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
     private String description;
-    private Timestamp created = Timestamp.valueOf(LocalDateTime.now());
-    private Boolean done = false;
+    private Timestamp created = Timestamp.valueOf(LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    private boolean done = false;
 }

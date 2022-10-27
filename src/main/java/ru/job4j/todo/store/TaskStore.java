@@ -36,21 +36,19 @@ public class TaskStore {
      * @param task
      * @return boolean
      */
-    public boolean update(Integer id, Task task) {
-        boolean rsl = false;
+    public boolean update(int id, Task task) {
         String updateQuery = "UPDATE Task as t SET"
                 + " t.description = :fDescription"
                 + " WHERE t.id = :fId";
         Session session = sf.openSession();
         session.beginTransaction();
-        session.createQuery(updateQuery)
+        int rsl = session.createQuery(updateQuery)
                 .setParameter("fDescription", task.getDescription())
                 .setParameter("fId", id)
                 .executeUpdate();
         session.getTransaction().commit();
-        rsl = true;
         session.close();
-        return rsl;
+        return rsl > 0;
     }
 
     /**
@@ -61,21 +59,19 @@ public class TaskStore {
      * @param id
      * @return boolean
      */
-    public boolean complete(Integer id) {
-        boolean rsl = false;
+    public boolean complete(int id) {
         String updateQuery = "UPDATE Task as t SET"
                 + " t.done = :fDone"
                 + " WHERE t.id = :fId";
         Session session = sf.openSession();
         session.beginTransaction();
-        session.createQuery(updateQuery)
+        int rsl = session.createQuery(updateQuery)
                 .setParameter("fDone", true)
                 .setParameter("fId", id)
                 .executeUpdate();
         session.getTransaction().commit();
-        rsl = true;
         session.close();
-        return rsl;
+        return rsl > 0;
     }
 
     /**
@@ -83,18 +79,16 @@ public class TaskStore {
      * @param id
      * @return boolean
      */
-    public boolean delete(Integer id) {
-        boolean rsl = false;
+    public boolean delete(int id) {
         Session session = sf.openSession();
         session.beginTransaction();
-        session.createQuery(
+        int rsl = session.createQuery(
                 "DELETE Task WHERE id = :fId")
                 .setParameter("fId", id)
                 .executeUpdate();
         session.getTransaction().commit();
-        rsl = true;
         session.close();
-        return rsl;
+        return rsl > 0;
     }
 
     /**
@@ -109,6 +103,40 @@ public class TaskStore {
         session.getTransaction().commit();
         session.close();
         return tasks;
+    }
+
+    /**
+     * Достает все task c флагом true
+     * @return List<Task>
+     */
+    public List<Task> findCompleted() {
+        Session session = sf.openSession();
+        session.beginTransaction();
+        List<Task> completed = session.createQuery(
+                "from Task as t WHERE"
+                        + " t.done = :fDone")
+                .setParameter("fDone", true)
+                .list();
+        session.getTransaction().commit();
+        session.close();
+        return completed;
+    }
+
+    /**
+     * Достает все task c флагом false
+     * @return List<Task>
+     */
+    public List<Task> findNotCompleted() {
+        Session session = sf.openSession();
+        session.beginTransaction();
+        List<Task> notCompleted = session.createQuery(
+                "from Task as t WHERE"
+                        + " t.done = :fDone")
+                .setParameter("fDone", false)
+                .list();
+        session.getTransaction().commit();
+        session.close();
+        return notCompleted;
     }
 
     /**

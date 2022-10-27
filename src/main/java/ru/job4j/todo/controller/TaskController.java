@@ -39,11 +39,7 @@ public class TaskController {
      */
     @GetMapping("/done")
     public String done(Model model) {
-        model.addAttribute("tasks", taskService.findAllTasks()
-                .stream()
-                .filter(t -> t.getDone())
-                .collect(Collectors.toList())
-        );
+        model.addAttribute("tasks", taskService.findCompletedTask());
         return "done";
     }
 
@@ -54,11 +50,7 @@ public class TaskController {
      */
     @GetMapping("/notDone")
     public String notDone(Model model) {
-        model.addAttribute("tasks", taskService.findAllTasks()
-                .stream()
-                .filter(t -> !(t.getDone()))
-                .collect(Collectors.toList())
-        );
+        model.addAttribute("tasks", taskService.findNotCompletedTask());
         return "notDone";
     }
 
@@ -126,7 +118,7 @@ public class TaskController {
     @PostMapping("/editTask")
     public String edit(@ModelAttribute Task task) {
         taskService.updateTask(task.getId(), task);
-        return "redirect:/detailed/" + String.valueOf(task.getId());
+        return "redirect:/detailed/" + task.getId();
     }
 
     /**
