@@ -25,10 +25,10 @@
 <div class="container">
 
     <nav class="nav nav-tabs">
-        <a class="nav-item nav-link" th:href="@{/all}">Все</a>
+        <a class="nav-item nav-link active" href="#">Все</a>
         <a class="nav-item nav-link" th:href="@{/done}">Выполненные</a>
-        <a class="nav-item nav-link active" href="#">Новые</a>
-        <a class="nav-item nav-link" th:href="@{/personlInfo}">Личный Кабинет</a>
+        <a class="nav-item nav-link" th:href="@{/notDone}">Новые</a>
+        <a class="nav-item nav-link active" href="#">Личный Кабинет</a>
         <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
             <span th:text="${user.name}"></span>
             <span> | Войти</span>
@@ -40,44 +40,36 @@
     </nav>
 
     <div class="row pt-3">
-        <h2>
-            Не выполненные задачи
-        </h2>
-    </div>
+        <div class="card" style="width: 60%">
+            <div class="card-header">
+                <h3>Личный кабинет</h3>
+            </div>
 
-    <div class="row pt-3">
-        <table class="table table-hover table-bordered">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Задание</th>
-                <th scope="col">Дата создания</th>
-                <th scope="col">Состояние</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="task: ${tasks}">
-                <td th:text="${task.id}"/>
-                <td>
-                    <a th:href="@{|/detailed/${task.id}|}" th:text="${task.description}"/>
-                </td>
-                <td>
-                    <span th:text="${task.created}"/>
-                </td>
-                <td class="table-success" th:if="${task.done}">
-                    Выполнено!
-                </td>
-                <td class="table-warning" th:if="${!task.done}">
-                    Еще не сделано.
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="row pt-3">
-        <a class="btn btn-primary" th:href="@{/formAddTask}" role="button">Добавить задание</a>
-    </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th scope="col">Имя</th>
+                        <td>
+                            <span th:text="${user.name}">
+                            </span>
+                            <a th:href="@{/formUpdateUser}">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Логин</th>
+                        <td th:text="${user.login}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Пароль</th>
+                        <td th:text="${user.password}"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
+    </div>
 </div>
 </body>
 </html>

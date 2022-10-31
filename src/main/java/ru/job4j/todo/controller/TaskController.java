@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
 
-import java.util.stream.Collectors;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @AllArgsConstructor
@@ -27,7 +28,9 @@ public class TaskController {
      * @return String
      */
     @GetMapping("/all")
-    public String all(Model model) {
+    public String all(Model model, HttpSession session) {
+        User user = getUserSession(session);
+        model.addAttribute("user", user);
         model.addAttribute("tasks", taskService.findAllTasks());
         return "all";
     }
@@ -38,7 +41,9 @@ public class TaskController {
      * @return String
      */
     @GetMapping("/done")
-    public String done(Model model) {
+    public String done(Model model, HttpSession session) {
+        User user = getUserSession(session);
+        model.addAttribute("user", user);
         model.addAttribute("tasks", taskService.findCompletedTask());
         return "done";
     }
@@ -49,7 +54,9 @@ public class TaskController {
      * @return String
      */
     @GetMapping("/notDone")
-    public String notDone(Model model) {
+    public String notDone(Model model, HttpSession session) {
+        User user = getUserSession(session);
+        model.addAttribute("user", user);
         model.addAttribute("tasks", taskService.findNotCompletedTask());
         return "notDone";
     }
@@ -60,7 +67,9 @@ public class TaskController {
      * @return String
      */
     @GetMapping("/formAddTask")
-    public String addTask(Model model) {
+    public String addTask(Model model, HttpSession session) {
+        User user = getUserSession(session);
+        model.addAttribute("user", user);
         model.addAttribute("task", new Task());
         return "addTask";
     }
@@ -90,8 +99,10 @@ public class TaskController {
     }
 
     @GetMapping("/detailed/{taskId}")
-    public String detailed(Model model,
+    public String detailed(Model model, HttpSession session,
                        @PathVariable("taskId") int id) {
+        User user = getUserSession(session);
+        model.addAttribute("user", user);
         model.addAttribute("task", taskService.findTaskById(id));
         return "detailed";
     }
@@ -103,8 +114,10 @@ public class TaskController {
      * @return String
      */
     @GetMapping("/formEdit/{taskId}")
-    public String edit(Model model,
+    public String edit(Model model, HttpSession session,
                        @PathVariable("taskId") int id) {
+        User user = getUserSession(session);
+        model.addAttribute("user", user);
         model.addAttribute("task", taskService.findTaskById(id));
         return "edit";
     }
@@ -133,4 +146,20 @@ public class TaskController {
         taskService.completeTask(id);
         return "redirect:/all";
     }
+
+    /**
+     * Внутриний метод получения текущего
+     * user по текущей session.
+     * @param session
+     * @return User
+     */
+    private User getUserSession(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        return user;
+    }
+
 }

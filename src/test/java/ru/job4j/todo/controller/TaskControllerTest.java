@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
 
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,9 +23,10 @@ public class TaskControllerTest {
         List<Task> tasks = Arrays.asList(task1, task2);
         Model model = mock(Model.class);
         TaskService taskService = mock(TaskService.class);
+        HttpSession session = mock(HttpSession.class);
         when(taskService.findAllTasks()).thenReturn(tasks);
         TaskController taskController = new TaskController(taskService);
-        String page = taskController.all(model);
+        String page = taskController.all(model, session);
         verify(model).addAttribute("tasks", tasks);
         assertThat(page, is("all"));
     }
