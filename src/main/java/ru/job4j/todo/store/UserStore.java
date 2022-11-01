@@ -33,7 +33,7 @@ public class UserStore {
             e.printStackTrace();
             return Optional.empty();
         }
-        return Optional.ofNullable(user);
+        return Optional.of(user);
     }
 
     /**
@@ -45,7 +45,7 @@ public class UserStore {
      * @return Optional<User>
      */
     public Optional<User> findUserByLoginAndPassword(String login, String password) {
-        Optional<User> result;
+        Optional<User> result = Optional.empty();
         try {
             Session session = sf.openSession();
             session.beginTransaction();
@@ -60,7 +60,7 @@ public class UserStore {
             session.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return Optional.empty();
+            return result;
         }
         return result;
     }
@@ -71,10 +71,11 @@ public class UserStore {
      * поля из переданого user.
      *
      * @param id
-     * @param task
+     * @param user
      * @return boolean
      */
     public boolean update(int id, User user) {
+        boolean rsl = false;
         try {
             String updateQuery = "UPDATE User as u SET"
                     + " u.name = :fName,"
@@ -83,31 +84,31 @@ public class UserStore {
                     + " WHERE u.id = :fId";
             Session session = sf.openSession();
             session.beginTransaction();
-            session.createQuery(updateQuery)
+            rsl = session.createQuery(updateQuery)
                     .setParameter("fName", user.getName())
                     .setParameter("fLogin", user.getLogin())
                     .setParameter("fPassword", user.getPassword())
                     .setParameter("fId", id)
-                    .executeUpdate();
+                    .executeUpdate() > 0;
             session.getTransaction().commit();
             session.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return rsl;
         }
-        return true;
+        return rsl;
     }
 
     /**
      * Поиск пользователя по id.
      *
      * @param id
-     * @return User
+     * @return Optional<User>
      */
-    public User findById(int id) {
+    public Optional<User> findById(int id) {
         Session session = sf.openSession();
         session.beginTransaction();
-        User result = session.get(User.class, id);
+        Optional<User> result = Optional.ofNullable(session.get(User.class, id));
         session.getTransaction().commit();
         session.close();
         return result;

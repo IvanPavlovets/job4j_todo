@@ -6,6 +6,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * Класс отвечает за то что только авторизованный
@@ -15,6 +16,12 @@ import java.io.IOException;
  */
 @Component
 public class AuthFilter implements Filter {
+
+    /**
+     * Set совпадений uri
+     */
+    private Set<String> uris = Set.of("loginPage", "login", "formAddUser", "registration");
+
     /**
      * Через этот метод будут проходить запросы к сервлетам.
      * - Если запрос идет к адресам loginPage или login,
@@ -32,8 +39,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String uri = req.getRequestURI();
-        if (uri.endsWith("loginPage") || uri.endsWith("login")
-                || uri.endsWith("formAddUser") || uri.endsWith("registration")) {
+        if (uris.stream().anyMatch(s -> uri.endsWith(s))) {
             chain.doFilter(req, res);
             return;
         }

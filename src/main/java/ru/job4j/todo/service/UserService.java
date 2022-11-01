@@ -49,9 +49,9 @@ public class UserService {
     /**
      * Поиск по id
      * @param id
-     * @return User
+     * @return Optional<User>
      */
-    public User findById(int id) {
+    public Optional<User> findById(int id) {
         return userStore.findById(id);
     }
 }

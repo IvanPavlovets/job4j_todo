@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
+import static ru.job4j.todo.utils.UserUtils.getUserSession;
+
 @Controller
 @AllArgsConstructor
 public class UserContoller {
@@ -156,23 +158,8 @@ public class UserContoller {
             return "redirect:/formUpdateUser?fail=true";
         }
         HttpSession session = req.getSession();
-        session.setAttribute("user", userService.findById(user.getId()));
+        session.setAttribute("user", userService.findById(user.getId()).get());
         return "redirect:/personlInfo";
-    }
-
-    /**
-     * Внутриний метод получения текущего
-     * user по текущей session.
-     * @param session
-     * @return User
-     */
-    private User getUserSession(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setName("Гость");
-        }
-        return user;
     }
 
 }

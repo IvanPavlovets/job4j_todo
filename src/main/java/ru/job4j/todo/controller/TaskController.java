@@ -13,6 +13,8 @@ import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
 
+import static ru.job4j.todo.utils.UserUtils.getUserSession;
+
 @Controller
 @AllArgsConstructor
 public class TaskController {
@@ -145,21 +147,6 @@ public class TaskController {
     public String completeTask(@PathVariable("taskId") int id) {
         taskService.completeTask(id);
         return "redirect:/all";
-    }
-
-    /**
-     * Внутриний метод получения текущего
-     * user по текущей session.
-     * @param session
-     * @return User
-     */
-    private User getUserSession(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setName("Гость");
-        }
-        return user;
     }
 
 }

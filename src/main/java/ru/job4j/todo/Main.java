@@ -7,6 +7,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import ru.job4j.todo.model.User;
+
+import javax.servlet.http.HttpSession;
 
 @SpringBootApplication
 public class Main {
