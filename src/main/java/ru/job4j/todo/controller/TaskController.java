@@ -13,7 +13,8 @@ import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
 
-import ru.job4j.todo.utils.*;
+import static ru.job4j.todo.utils.UserUtils.getUserSession;
+
 
 @Controller
 @AllArgsConstructor

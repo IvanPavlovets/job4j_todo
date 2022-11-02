@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
-import ru.job4j.todo.utils.*;
+import static ru.job4j.todo.utils.UserUtils.getUserSession;
+
 
 @Controller
 @AllArgsConstructor
@@ -103,7 +104,6 @@ public class UserContoller {
      * В условии проверка на пустой Optional
      * - При возврате пустого Optional у параметра fail
      * значение поменяеться на true и переход на formAddUser.
-     * @param model
      * @param user
      * @return String
      */
