@@ -5,12 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.store.TaskStore;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -37,8 +33,8 @@ public class TaskService {
      * поля из переданого task.
      * @param task
      */
-    public boolean updateTask(int id, Task task) {
-        return taskStore.update(id, task);
+    public void updateTask(int id, Task task) {
+        taskStore.update(id, task);
     }
 
     /**
@@ -46,17 +42,16 @@ public class TaskService {
      * путем замены флага в done, на true.
      * @param id
      */
-    public boolean completeTask(int id) {
-        return taskStore.complete(id);
+    public void completeTask(int id) {
+        taskStore.complete(id);
     }
 
     /**
      * Удаление Task по id.
      * @param id
-     * @return
      */
-    public boolean deleteTask(int id) {
-        return taskStore.delete(id);
+    public void deleteTask(int id) {
+        taskStore.delete(id);
     }
 
     /**
@@ -86,9 +81,9 @@ public class TaskService {
     /**
      * Находит запись в БД по id
      * @param id
-     * @return Task
+     * @return Optional<Task>
      */
-    public Task findTaskById(int id) {
+    public Optional<Task> findTaskById(int id) {
         return taskStore.findById(id);
     }
 }
