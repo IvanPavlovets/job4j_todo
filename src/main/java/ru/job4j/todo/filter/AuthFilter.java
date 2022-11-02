@@ -39,7 +39,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String uri = req.getRequestURI();
-        if (uris.stream().anyMatch(s -> uri.endsWith(s))) {
+        if (uris.stream().anyMatch(uri::endsWith)) {
             chain.doFilter(req, res);
             return;
         }

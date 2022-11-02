@@ -1,9 +1,11 @@
 package ru.job4j.todo.utils;
 
+import lombok.experimental.UtilityClass;
 import ru.job4j.todo.model.User;
 
 import javax.servlet.http.HttpSession;
 
+@UtilityClass
 public class UserUtils {
 
     /**
@@ -12,7 +14,7 @@ public class UserUtils {
      * @param session
      * @return User
      */
-    public static User getUserSession(HttpSession session) {
+    public User getUserSession(HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             user = new User();
