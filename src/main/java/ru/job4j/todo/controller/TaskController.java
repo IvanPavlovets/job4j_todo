@@ -106,7 +106,7 @@ public class TaskController {
                        @PathVariable("taskId") int id) {
         User user = getUserSession(session);
         model.addAttribute("user", user);
-        model.addAttribute("task", taskService.findTaskById(id));
+        model.addAttribute("task", taskService.findTaskById(id).get());
         return "detailed";
     }
 

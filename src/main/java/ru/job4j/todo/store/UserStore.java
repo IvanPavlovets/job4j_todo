@@ -6,11 +6,15 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.User;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class UserStore {
+
+    private final CrudRepository crudRepository;
+
     private final SessionFactory sf;
 
     /**
@@ -72,32 +76,29 @@ public class UserStore {
      *
      * @param id
      * @param user
-     * @return boolean
+     * @return Optional<User>
      */
     public boolean update(int id, User user) {
         boolean rsl = false;
         try {
-            String updateQuery = "UPDATE User as u SET"
-                    + " u.name = :fName,"
-                    + " u.login = :fLogin,"
-                    + " u.password = :fPassword"
-                    + " WHERE u.id = :fId";
-            Session session = sf.openSession();
-            session.beginTransaction();
-            rsl = session.createQuery(updateQuery)
-                    .setParameter("fName", user.getName())
-                    .setParameter("fLogin", user.getLogin())
-                    .setParameter("fPassword", user.getPassword())
-                    .setParameter("fId", id)
-                    .executeUpdate() > 0;
-            session.getTransaction().commit();
-            session.close();
+            return crudRepository.tx(
+                    session -> session.createQuery("UPDATE User as u SET"
+                            + " u.name = :fName,"
+                            + " u.login = :fLogin,"
+                            + " u.password = :fPassword"
+                            + " WHERE u.id = :fId")
+                            .setParameter("fName", user.getName())
+                            .setParameter("fLogin", user.getLogin())
+                            .setParameter("fPassword", user.getPassword())
+                            .setParameter("fId", id)
+                            .executeUpdate() > 0
+            );
         } catch (Exception e) {
             e.printStackTrace();
-            return rsl;
         }
         return rsl;
     }
+
 
     /**
      * Поиск пользователя по id.
@@ -106,11 +107,9 @@ public class UserStore {
      * @return Optional<User>
      */
     public Optional<User> findById(int id) {
-        Session session = sf.openSession();
-        session.beginTransaction();
-        Optional<User> result = Optional.ofNullable(session.get(User.class, id));
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return crudRepository.optional(
+                "from User as u where u.id = :fId", User.class,
+                Map.of("fId", id)
+        );
     }
 }
