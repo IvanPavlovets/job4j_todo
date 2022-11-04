@@ -116,10 +116,16 @@ public class TaskStore {
      * @return Optional<Task>
      */
     public Optional<Task> findById(int id) {
-        return crudRepository.optional(
-                "from Task as t where t.id = :fId", Task.class,
-                Map.of("fId", id)
-        );
+        Optional<Task> rsl = Optional.empty();
+        try {
+            rsl = crudRepository.optional(
+                    "from Task as t where t.id = :fId", Task.class,
+                    Map.of("fId", id));
+            return rsl;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return rsl;
+        }
     }
 
 }

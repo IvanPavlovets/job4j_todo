@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 
 import java.util.Map;
@@ -14,8 +15,6 @@ import java.util.Optional;
 public class UserStore {
 
     private final CrudRepository crudRepository;
-
-    private final SessionFactory sf;
 
     /**
      * Добавляет User в бд.
@@ -28,11 +27,8 @@ public class UserStore {
      */
     public Optional<User> add(User user) {
         try {
-            Session session = sf.openSession();
-            session.beginTransaction();
-            session.save(user);
-            session.getTransaction().commit();
-            session.close();
+            crudRepository.run(
+                    session -> session.persist(user));
         } catch (Exception e) {
             e.printStackTrace();
             return Optional.empty();
@@ -49,24 +45,12 @@ public class UserStore {
      * @return Optional<User>
      */
     public Optional<User> findUserByLoginAndPassword(String login, String password) {
-        Optional<User> result = Optional.empty();
-        try {
-            Session session = sf.openSession();
-            session.beginTransaction();
-            result = session.createQuery(
-                    "from User as u WHERE"
-                            + " u.login = :fLogin AND"
-                            + " u.password = :fPassword")
-                    .setParameter("fLogin", login)
-                    .setParameter("fPassword", password)
-                    .uniqueResultOptional();
-            session.getTransaction().commit();
-            session.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return result;
-        }
-        return result;
+        return crudRepository.optional(
+                "from User as u WHERE"
+                        + " u.login = :fLogin AND"
+                        + " u.password = :fPassword", User.class,
+                Map.of("fLogin", login, "fPassword", password)
+        );
     }
 
     /**
@@ -107,9 +91,16 @@ public class UserStore {
      * @return Optional<User>
      */
     public Optional<User> findById(int id) {
-        return crudRepository.optional(
-                "from User as u where u.id = :fId", User.class,
-                Map.of("fId", id)
-        );
+        Optional<User> rsl = Optional.empty();
+        try {
+            rsl = crudRepository.optional(
+                    "from User as u where u.id = :fId", User.class,
+                    Map.of("fId", id));
+            return rsl;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return rsl;
+        }
     }
+
 }

@@ -1,10 +1,7 @@
 package ru.job4j.todo.store;
 
-import org.hibernate.Session;
+import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.job4j.todo.Main;
 import ru.job4j.todo.model.Task;
@@ -13,56 +10,61 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
+@AllArgsConstructor
 public class TaskStoreTest {
 
-    public CrudRepository crudRepository;
+    @Test
+    public void whenAddTask() {
+        SessionFactory sf = new Main().sf();
+        CrudRepository crudRepository = new CrudRepository(sf);
+        Task task = new Task();
+        task.setDescription("desc1");
+        TaskStore store = new TaskStore(crudRepository);
+        Task result = store.add(task);
+        Task storedTask = store.findById(task.getId()).get();
+        assertThat(storedTask, is(result));
+    }
 
-//    public TaskStoreTest() {
-//        crudRepository = new CrudRepository();
-//    }
+    @Test
+    public void whenUpdateThenTrue() {
+        SessionFactory sf = new Main().sf();
+        CrudRepository crudRepository = new CrudRepository(sf);
+        Task task = new Task();
+        task.setDescription("desc1");
+        TaskStore store = new TaskStore(crudRepository);
+        store.add(task);
+        task.setDescription("descUpdate");
+        store.update(task.getId(), task);
+        Task storedTask = store.findById(task.getId()).get();
+        assertThat(storedTask.getDescription(), is(task.getDescription()));
+    }
 
-//    @Test
-//    public void whenAddTask() {
-//        Task task = new Task();
-//        task.setDescription("desc1");
-//        TaskStore store = new TaskStore(crudRepository);
-//        Task result = store.add(task);
-//        assertThat(store.findById(task.getId()), is(result));
-//    }
-//
-//    @Test
-//    public void whenUpdateThenTrue() {
-//        Task task = new Task();
-//        task.setDescription("desc1");
-//        TaskStore store = new TaskStore(crudRepository);
-//        store.add(task);
-//        task.setDescription("descUpdate");
-//        boolean result = store.update(task.getId(), task);
-//        assertTrue(result);
-//    }
-//
-//    @Test
-//    public void whenCompleteThenTrue() {
-//        Task task = new Task();
-//        task.setDescription("desc1");
-//        TaskStore store = new TaskStore(crudRepository);
-//        store.add(task);
-//        store.complete(task.getId());
-//        boolean result = store.findById(task.getId()).isDone();
-//        assertTrue(result);
-//    }
+    @Test
+    public void whenCompleteThenTrue() {
+        SessionFactory sf = new Main().sf();
+        CrudRepository crudRepository = new CrudRepository(sf);
+        Task task = new Task();
+        task.setDescription("desc1");
+        TaskStore store = new TaskStore(crudRepository);
+        store.add(task);
+        store.complete(task.getId());
+        boolean result = store.findById(task.getId()).get().isDone();
+        assertTrue(result);
+    }
 
-//    @Test
-//    public void whendeleteThenTrue() {
-//        Task task = new Task();
-//        task.setDescription("desc1");
-//        TaskStore store = new TaskStore(crudRepository);
-//        store.add(task);
-//        store.delete(task.getId());
-//        Optional<Task> result = store.findById(task.getId());
-//        assertNull(result);
-//    }
+    @Test
+    public void whendeleteThenTrue() {
+        SessionFactory sf = new Main().sf();
+        CrudRepository crudRepository = new CrudRepository(sf);
+        Task task = new Task();
+        task.setDescription("desc1");
+        TaskStore store = new TaskStore(crudRepository);
+        store.add(task);
+        store.delete(task.getId());
+        Optional<Task> result = store.findById(task.getId());
+        assertTrue(result.isEmpty());
+    }
 
 }
