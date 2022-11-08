@@ -22,7 +22,7 @@ public class TaskStore {
      * @return Task
      */
     public Task add(Task task) {
-        crudRepository.run(session -> session.persist(task));
+        crudRepository.run(session -> session.save(task));
         return task;
     }
 

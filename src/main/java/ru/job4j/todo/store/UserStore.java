@@ -1,10 +1,7 @@
 package ru.job4j.todo.store;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
-import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 
 import java.util.Map;
@@ -45,12 +42,18 @@ public class UserStore {
      * @return Optional<User>
      */
     public Optional<User> findUserByLoginAndPassword(String login, String password) {
-        return crudRepository.optional(
-                "from User as u WHERE"
-                        + " u.login = :fLogin AND"
-                        + " u.password = :fPassword", User.class,
-                Map.of("fLogin", login, "fPassword", password)
-        );
+        Optional<User> rsl = Optional.empty();
+        try {
+            rsl = crudRepository.optional(
+                    "from User as u WHERE"
+                            + " u.login = :fLogin AND"
+                            + " u.password = :fPassword", User.class,
+                    Map.of("fLogin", login, "fPassword", password));
+            return rsl;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return rsl;
+        }
     }
 
     /**

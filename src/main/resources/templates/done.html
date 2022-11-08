@@ -51,6 +51,7 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Задание</th>
+                <th scope="col">Автор задания</th>
                 <th scope="col">Дата создания</th>
                 <th scope="col">Состояние</th>
             </tr>
@@ -60,6 +61,9 @@
                 <td th:text="${task.id}"/>
                 <td>
                     <a th:href="@{|/detailed/${task.id}|}" th:text="${task.description}"/>
+                </td>
+                <td>
+                    <span th:text="${task.user.name}"/>
                 </td>
                 <td>
                     <span th:text="${task.created}"/>

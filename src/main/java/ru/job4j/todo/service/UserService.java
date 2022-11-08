@@ -54,4 +54,5 @@ public class UserService {
     public Optional<User> findById(int id) {
         return userStore.findById(id);
     }
+
 }

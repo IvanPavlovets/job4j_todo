@@ -59,6 +59,12 @@
                         </td>
                     </tr>
                     <tr>
+                        <th scope="col">Автор задания</th>
+                        <td>
+                            <span th:text="${task.user.name}"/>
+                        </td>
+                    </tr>
+                    <tr>
                         <th scope="col">Дата создания</th>
                         <td th:text="${task.created}"></td>
                     </tr>

@@ -48,6 +48,7 @@
                         <label for="description">Описание задания</label>
                         <input type="text" class="form-control" name="description" id="description" placeholder="Введите описание задания">
                     </div>
+                    <input type="hidden" name="user.id" th:value="${user.id}"/>
                     <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
                 </form>
             </div>
