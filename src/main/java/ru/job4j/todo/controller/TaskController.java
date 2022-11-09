@@ -87,7 +87,8 @@ public class TaskController {
      * @return String
      */
     @PostMapping("/createTask")
-    public String createTask(@ModelAttribute Task task) {
+    public String createTask(@ModelAttribute Task task, HttpSession session) {
+        task.setUser((User) session.getAttribute("user"));
         taskService.addTask(task);
         return "redirect:/all";
     }
