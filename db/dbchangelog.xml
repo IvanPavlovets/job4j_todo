@@ -14,4 +14,5 @@
     <include file="scripts/004_ddl_tasks_alter(add_user_id).sql" relativeToChangelogFile="true"/>
     <include file="scripts/005_dml_tasks_update(user_id).sql" relativeToChangelogFile="true"/>
     <include file="scripts/006_ddl_tasks_alter(set_constrain_user_id).sql" relativeToChangelogFile="true"/>
+    <include file="scripts/007_ddl_priorities_dml_tasks.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
