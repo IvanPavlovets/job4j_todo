@@ -53,6 +53,7 @@
                 <th scope="col">Задание</th>
                 <th scope="col">Автор задания</th>
                 <th scope="col">Дата создания</th>
+                <th scope="col">Приоритет задания</th>
                 <th scope="col">Состояние</th>
             </tr>
             </thead>
@@ -67,6 +68,9 @@
                 </td>
                 <td>
                     <span th:text="${task.created}"/>
+                </td>
+                <td>
+                    <span th:text="${task.priority.name}"/>
                 </td>
                 <td class="table-success" th:if="${task.done}">
                     Выполнено!

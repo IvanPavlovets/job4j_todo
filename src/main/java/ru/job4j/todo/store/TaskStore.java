@@ -79,7 +79,7 @@ public class TaskStore {
      */
     public List<Task> findAll() {
         return crudRepository.query(
-                "from Task", Task.class
+                "from Task t join fetch t.priority", Task.class
         );
     }
 
@@ -103,7 +103,7 @@ public class TaskStore {
      */
     public List<Task> findNotCompleted() {
         return crudRepository.query(
-                "from Task as t WHERE"
+                "from Task t join fetch t.priority WHERE"
                         + " t.done = :fDone", Task.class,
                 Map.of("fDone", false)
         );

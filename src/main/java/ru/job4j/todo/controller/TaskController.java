@@ -13,9 +13,6 @@ import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static ru.job4j.todo.utils.UserUtils.getUserSession;
 
 
