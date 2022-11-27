@@ -53,6 +53,7 @@
                 <th scope="col">Задание</th>
                 <th scope="col">Автор задания</th>
                 <th scope="col">Дата создания</th>
+                <th scope="col">Категория задания</th>
                 <th scope="col">Состояние</th>
             </tr>
             </thead>
@@ -67,6 +68,10 @@
                 </td>
                 <td>
                     <span th:text="${task.created}"/>
+                </td>
+                <td>
+                    <span th:each="category : ${task.categories}"
+                          th:text="${category.name}"/>
                 </td>
                 <td class="table-success" th:if="${task.done}">
                     Выполнено!

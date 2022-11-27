@@ -2,7 +2,9 @@ package ru.job4j.todo.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.store.CategoryStore;
 import ru.job4j.todo.store.TaskStore;
 
 import java.util.List;
@@ -16,6 +18,7 @@ public class TaskService {
      * Работа с БД через слой персистенции.
      */
     private final TaskStore taskStore;
+    private final CategoryStore categoryStore;
 
     /**
      * Создание задания.
@@ -85,5 +88,13 @@ public class TaskService {
      */
     public Optional<Task> findTaskById(int id) {
         return taskStore.findById(id);
+    }
+
+    /**
+     * Достает все Category из таблицы categories
+     * @return List<Category>
+     */
+    public List<Category> findAllCategories() {
+        return categoryStore.findAllCategories();
     }
 }

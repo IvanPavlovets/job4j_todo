@@ -74,6 +74,7 @@ public class TaskController {
         User user = getUserSession(session);
         model.addAttribute("user", user);
         model.addAttribute("task", new Task());
+        model.addAttribute("categories", taskService.findAllCategories());
         return "addTask";
     }
 
