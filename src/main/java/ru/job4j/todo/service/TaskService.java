@@ -3,8 +3,10 @@ package ru.job4j.todo.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Category;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.store.CategoryStore;
+import ru.job4j.todo.store.PriorityStore;
 import ru.job4j.todo.store.TaskStore;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class TaskService {
      */
     private final TaskStore taskStore;
     private final CategoryStore categoryStore;
+    private final PriorityStore priorityStore;
 
     /**
      * Создание задания.
@@ -96,5 +99,31 @@ public class TaskService {
      */
     public List<Category> findAllCategories() {
         return categoryStore.findAllCategories();
+    }
+
+    /**
+     * Находит category в БД по id
+     * @param id
+     * @return Optional<Category>
+     */
+    public Optional<Category> findCategoryById(int id) {
+        return categoryStore.findCategoryById(id);
+    }
+
+    /**
+     * Находит Priority в БД по id
+     * @param id
+     * @return Optional<Priority>
+     */
+    public Optional<Priority> findPriorityById(int id) {
+        return priorityStore.findPriorityById(id);
+    }
+
+    /**
+     * Достает все Priority из таблицы priorities
+     * @return
+     */
+    public List<Priority> findAllPriorities() {
+        return priorityStore.findAllPriorities();
     }
 }

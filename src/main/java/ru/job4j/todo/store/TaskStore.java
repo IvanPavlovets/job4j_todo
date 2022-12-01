@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Слой персистенции для сущности Task
+ */
 @Repository
 @AllArgsConstructor
 public class TaskStore {
@@ -78,8 +81,8 @@ public class TaskStore {
      * @return List<Task>
      */
     public List<Task> findAll() {
-        return crudRepository.query(
-                "from Task t join fetch t.priority", Task.class
+        return crudRepository.queryDistinct(
+                "select distinct t from Task t left join fetch t.categories join fetch t.priority", Task.class
         );
     }
 
@@ -89,9 +92,9 @@ public class TaskStore {
      * @return List<Task>
      */
     public List<Task> findCompleted() {
-        return crudRepository.query(
-                "from Task as t WHERE"
-                        + " t.done = :fDone", Task.class,
+        return crudRepository.queryDistinct(
+                "select distinct t from Task as t left join fetch t.categories WHERE"
+                        + " t.done = :fDone order by created asc", Task.class,
                 Map.of("fDone", true)
         );
     }
@@ -102,9 +105,10 @@ public class TaskStore {
      * @return List<Task>
      */
     public List<Task> findNotCompleted() {
-        return crudRepository.query(
-                "from Task t join fetch t.priority WHERE"
-                        + " t.done = :fDone", Task.class,
+        return crudRepository.queryDistinct(
+                "select distinct t from Task as t left join fetch t.categories"
+                        + " join fetch t.priority WHERE"
+                        + " t.done = :fDone order by created asc", Task.class,
                 Map.of("fDone", false)
         );
     }

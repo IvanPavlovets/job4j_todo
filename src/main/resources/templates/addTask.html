@@ -47,14 +47,24 @@
                         <input type="hidden" name="id" value="0"/>
                         <label for="description">Описание задания</label>
                         <input type="text" class="form-control" name="description" id="description" placeholder="Введите описание задания">
+                    </div>
+                    <div class="form-group">
                         <label for="categoryId">Категория задания</label>
-                            <select class="form-control" id="categoryId" name="categoryId">
+                            <select class="form-control" id="categoryId" name="categoryId" multiple="multiple">
                                 <option th:each="category : ${categories}"
                                         th:value="${category.id}"
                                         th:text="${category.name}">
                                 </option>
                             </select>
-                        <input type="text" class="form-control" name="description" id="description" placeholder="Введите описание задания">
+                    </div>
+                    <div class="form-group">
+                        <label for="priorityId">Приоритет задания</label>
+                        <select class="form-control" id="priorityId" name="priorityId">
+                            <option th:each="priority : ${priorities}"
+                                    th:value="${priority.id}"
+                                    th:text="${priority.name}">
+                            </option>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
                 </form>

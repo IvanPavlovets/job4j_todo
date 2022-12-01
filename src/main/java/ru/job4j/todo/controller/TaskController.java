@@ -3,15 +3,13 @@ package ru.job4j.todo.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 import static ru.job4j.todo.utils.UserUtils.getUserSession;
 
@@ -28,6 +26,7 @@ public class TaskController {
      * Обрабатывает переход на all.html
      * Используется Thymeleaf для поиска объектов,
      * которые нужны отобразить на виде.
+     *
      * @return String
      */
     @GetMapping("/all")
@@ -40,6 +39,7 @@ public class TaskController {
 
     /**
      * Обрабатывает переход на done.html
+     *
      * @param model
      * @return String
      */
@@ -53,6 +53,7 @@ public class TaskController {
 
     /**
      * Обрабатывает переход на notDone.html
+     *
      * @param model
      * @return String
      */
@@ -66,6 +67,7 @@ public class TaskController {
 
     /**
      * Обрабатывает переход на addTask.html
+     *
      * @param model
      * @return String
      */
@@ -75,18 +77,29 @@ public class TaskController {
         model.addAttribute("user", user);
         model.addAttribute("task", new Task());
         model.addAttribute("categories", taskService.findAllCategories());
+        model.addAttribute("priorities", taskService.findAllPriorities());
         return "addTask";
     }
 
     /**
      * Обрабатывает добавление данных в task
+     * category и user
      * и их сохранение в store.
+     *
      * @param task
      * @return String
      */
     @PostMapping("/createTask")
-    public String createTask(@ModelAttribute Task task, HttpSession session) {
+    public String createTask(@RequestParam("categoryId") List<Integer> categoryId,
+                             @RequestParam("priorityId") int priorityId,
+                             @ModelAttribute Task task, HttpSession session) {
         task.setUser((User) session.getAttribute("user"));
+        for (Integer id : categoryId) {
+            var category = taskService.findCategoryById(id).get();
+            task.getCategories().add(category);
+        }
+        var priority = taskService.findPriorityById(priorityId).get();
+        task.setPriority(priority);
         taskService.addTask(task);
         return "redirect:/all";
     }
@@ -94,6 +107,7 @@ public class TaskController {
     /**
      * Обработка действий книпки удалить.
      * Удаление, выбраного, task по id.
+     *
      * @param id id выбраного task
      * @return String
      */
@@ -105,7 +119,7 @@ public class TaskController {
 
     @GetMapping("/detailed/{taskId}")
     public String detailed(Model model, HttpSession session,
-                       @PathVariable("taskId") int id) {
+                           @PathVariable("taskId") int id) {
         User user = getUserSession(session);
         model.addAttribute("user", user);
         model.addAttribute("task", taskService.findTaskById(id).get());
@@ -114,6 +128,7 @@ public class TaskController {
 
     /**
      * Обрабатывает переход на edit.html
+     *
      * @param model
      * @param id
      * @return String
@@ -130,6 +145,7 @@ public class TaskController {
     /**
      * Обрабатывает действие на сервере
      * редактирование task на edit.html
+     *
      * @param task
      * @return String
      */
@@ -143,6 +159,7 @@ public class TaskController {
      * Обработка действий книпки завершить.
      * Переводит task в состояние выполнено
      * путем замены флага в done, на true.
+     *
      * @param id id выбраного task
      * @return String
      */

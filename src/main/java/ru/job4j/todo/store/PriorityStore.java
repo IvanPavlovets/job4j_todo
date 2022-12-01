@@ -2,28 +2,28 @@ package ru.job4j.todo.store;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.job4j.todo.model.Category;
 
 import java.util.List;
+import ru.job4j.todo.model.Priority;
 import java.util.Map;
 import java.util.Optional;
 
 /**
- * Слой персистенции для сущности Category
+ * Слой персистенции для сущности Priority
  */
 @Repository
 @AllArgsConstructor
-public class CategoryStore {
+public class PriorityStore {
 
     private final CrudRepository crudRepository;
 
     /**
      * Достает все значения из хранилища (БД)
-     * @return List<Category>
+     * @return List<Priority>
      */
-    public List<Category> findAllCategories() {
+    public List<Priority> findAllPriorities() {
         return crudRepository.query(
-                "from Category", Category.class
+                "from Priority", Priority.class
         );
     }
 
@@ -31,13 +31,13 @@ public class CategoryStore {
      * Находит запись в БД по id
      *
      * @param id
-     * @return Optional<Category>
+     * @return Optional<Priority>
      */
-    public Optional<Category> findCategoryById(int id) {
-        Optional<Category> rsl = Optional.empty();
+    public Optional<Priority> findPriorityById(int id) {
+        Optional<Priority> rsl = Optional.empty();
         try {
             rsl = crudRepository.optional(
-                    "from Category as с where с.id = :fId", Category.class,
+                    "from Priority as p where p.id = :fId", Priority.class,
                     Map.of("fId", id));
             return rsl;
         } catch (Exception e) {
