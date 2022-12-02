@@ -126,4 +126,22 @@ public class TaskService {
     public List<Priority> findAllPriorities() {
         return priorityStore.findAllPriorities();
     }
+
+    /**
+     * Достает категорию по умолчанию.
+     * @param name
+     * @return Category
+     */
+    public Category getDefaultCategory(String name) {
+        return categoryStore.getDefaultCategory(name);
+    }
+
+    /**
+     * Достает приоритет по умаолчанию
+     * @param name
+     * @return Priority
+     */
+    public Priority getDefaultPriority(String name) {
+        return priorityStore.getDefaultPriority(name);
+    }
 }

@@ -46,4 +46,18 @@ public class PriorityStore {
         }
     }
 
+    /**
+     * метод получает значение по умолчанию.
+     * @param name
+     * @return Priority
+     */
+    public Priority getDefaultPriority(String name) {
+        return (Priority) crudRepository.tx(
+                session -> session
+                .createQuery("from Priority as p where p.name = :fname", Priority.class)
+                .setParameter("fname", name)
+        );
+    }
+
+
 }

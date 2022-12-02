@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
@@ -17,6 +18,7 @@ import static ru.job4j.todo.utils.UserUtils.getUserSession;
 @Controller
 @AllArgsConstructor
 public class TaskController {
+
     /**
      * Работа с TaskStore через промежуточный слой TaskService
      */
@@ -95,10 +97,12 @@ public class TaskController {
                              @ModelAttribute Task task, HttpSession session) {
         task.setUser((User) session.getAttribute("user"));
         for (Integer id : categoryId) {
-            var category = taskService.findCategoryById(id).get();
+            var category = taskService.findCategoryById(id)
+                    .orElseGet(()-> taskService.getDefaultCategory("default"));
             task.getCategories().add(category);
         }
-        var priority = taskService.findPriorityById(priorityId).get();
+        var priority = taskService.findPriorityById(priorityId)
+                .orElseGet(() -> taskService.getDefaultPriority("default"));
         task.setPriority(priority);
         taskService.addTask(task);
         return "redirect:/all";

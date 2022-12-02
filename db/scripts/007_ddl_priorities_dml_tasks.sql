@@ -6,6 +6,7 @@ CREATE TABLE if not exists priorities (
 
 INSERT INTO priorities (name, position) VALUES ('urgently', 1);
 INSERT INTO priorities (name, position) VALUES ('normal', 2);
+INSERT INTO priorities (name, position) VALUES ('default', 3);
 
 ALTER TABLE tasks ADD COLUMN priority_id int REFERENCES priorities(id);
 

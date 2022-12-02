@@ -81,7 +81,7 @@ public class TaskStore {
      * @return List<Task>
      */
     public List<Task> findAll() {
-        return crudRepository.queryDistinct(
+        return crudRepository.query(
                 "select distinct t from Task t left join fetch t.categories join fetch t.priority", Task.class
         );
     }
@@ -92,9 +92,9 @@ public class TaskStore {
      * @return List<Task>
      */
     public List<Task> findCompleted() {
-        return crudRepository.queryDistinct(
+        return crudRepository.query(
                 "select distinct t from Task as t left join fetch t.categories WHERE"
-                        + " t.done = :fDone order by created asc", Task.class,
+                        + " t.done = :fDone", Task.class,
                 Map.of("fDone", true)
         );
     }
@@ -105,10 +105,10 @@ public class TaskStore {
      * @return List<Task>
      */
     public List<Task> findNotCompleted() {
-        return crudRepository.queryDistinct(
+        return crudRepository.query(
                 "select distinct t from Task as t left join fetch t.categories"
                         + " join fetch t.priority WHERE"
-                        + " t.done = :fDone order by created asc", Task.class,
+                        + " t.done = :fDone", Task.class,
                 Map.of("fDone", false)
         );
     }

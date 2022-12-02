@@ -67,27 +67,6 @@ public class CrudRepository {
         return tx(command);
     }
 
-    /**
-     * 1) Специфическая разновидность query с использованием
-     * нескольких JOIN и избежанием "проблем декартова произведения".
-     * 2) distinct t использован для того, чтобы итоговый List<Task>
-     * не содержал дублирующихся тасков. 3) При этом
-     * .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
-     * не дает передаться ключевому слову distinct в native SQL —
-     * он там не нужен, поскольку выбранные строки в любом случае
-     * будут все разные.
-     * @param query
-     * @param cl
-     * @param <T>
-     * @return <T> List<T>
-     */
-    public <T> List<T> queryDistinct(String query, Class<T> cl) {
-        Function<Session, List<T>> command = session -> session
-                .createQuery(query, cl)
-                .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
-                .list();
-        return tx(command);
-    }
 
     /**
      * Метод абстрактной операции с:
@@ -132,20 +111,6 @@ public class CrudRepository {
             for (Map.Entry<String, Object> arg : args.entrySet()) {
                 sq.setParameter(arg.getKey(), arg.getValue());
             }
-            return sq.list();
-        };
-        return tx(command);
-    }
-
-
-    public <T> List<T> queryDistinct(String query, Class<T> cl, Map<String, Object> args) {
-        Function<Session, List<T>> command = session -> {
-            var sq = session
-                    .createQuery(query, cl);
-            for (Map.Entry<String, Object> arg : args.entrySet()) {
-                sq.setParameter(arg.getKey(), arg.getValue());
-            }
-            sq.setHint(QueryHints.PASS_DISTINCT_THROUGH, false);
             return sq.list();
         };
         return tx(command);
