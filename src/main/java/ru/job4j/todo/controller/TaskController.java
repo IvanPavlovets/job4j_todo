@@ -98,7 +98,7 @@ public class TaskController {
         task.setUser((User) session.getAttribute("user"));
         for (Integer id : categoryId) {
             var category = taskService.findCategoryById(id)
-                    .orElseGet(()-> taskService.getDefaultCategory("default"));
+                    .orElseGet(() -> taskService.getDefaultCategory("default"));
             task.getCategories().add(category);
         }
         var priority = taskService.findPriorityById(priorityId)
