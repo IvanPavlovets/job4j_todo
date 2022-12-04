@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static ru.job4j.todo.utils.UserUtils.getUserSession;
 
@@ -98,11 +98,15 @@ public class TaskController {
         task.setUser((User) session.getAttribute("user"));
         for (Integer id : categoryId) {
             var category = taskService.findCategoryById(id)
-                    .orElseGet(() -> taskService.getDefaultCategory("default"));
+                    .orElseThrow(() -> {
+                        return new NoSuchElementException("Category not found with id" + id);
+                    });
             task.getCategories().add(category);
         }
         var priority = taskService.findPriorityById(priorityId)
-                .orElseGet(() -> taskService.getDefaultPriority("default"));
+                .orElseThrow(() -> {
+                    return new NoSuchElementException("Priority not found with id" + priorityId);
+                });
         task.setPriority(priority);
         taskService.addTask(task);
         return "redirect:/all";
