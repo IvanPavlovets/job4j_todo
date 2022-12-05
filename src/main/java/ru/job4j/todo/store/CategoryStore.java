@@ -46,18 +46,5 @@ public class CategoryStore {
         }
     }
 
-    /**
-     * метод получает значение по умолчанию.
-     * @param name
-     * @return Category
-     */
-    public Category getDefaultCategory(String name) {
-        return (Category) crudRepository.tx(
-                session -> session
-                .createQuery("from Category as с where с.name = :fname", Category.class)
-                .setParameter("fname", name)
-        );
-    }
-
 
 }
