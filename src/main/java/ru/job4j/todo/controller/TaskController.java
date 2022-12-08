@@ -9,6 +9,8 @@ import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,7 +37,9 @@ public class TaskController {
     public String all(Model model, HttpSession session) {
         User user = getUserSession(session);
         model.addAttribute("user", user);
-        model.addAttribute("tasks", taskService.findAllTasks());
+        List<Task> tasks = taskService.findAllTasks();
+        tasks.forEach(task -> task.getCreated().atZone(ZoneId.of(user.getZone())));
+        model.addAttribute("tasks", tasks);
         return "all";
     }
 
@@ -49,7 +53,9 @@ public class TaskController {
     public String done(Model model, HttpSession session) {
         User user = getUserSession(session);
         model.addAttribute("user", user);
-        model.addAttribute("tasks", taskService.findCompletedTask());
+        List<Task> tasks = taskService.findCompletedTask();
+        tasks.forEach(task -> task.getCreated().atZone(ZoneId.of(user.getZone())));
+        model.addAttribute("tasks", tasks);
         return "done";
     }
 
@@ -63,6 +69,8 @@ public class TaskController {
     public String notDone(Model model, HttpSession session) {
         User user = getUserSession(session);
         model.addAttribute("user", user);
+        List<Task> tasks = taskService.findNotCompletedTask();
+        tasks.forEach(task -> task.getCreated().atZone(ZoneId.of(user.getZone())));
         model.addAttribute("tasks", taskService.findNotCompletedTask());
         return "notDone";
     }
@@ -87,6 +95,9 @@ public class TaskController {
      * Обрабатывает добавление данных в task
      * category и user
      * и их сохранение в store.
+     * task.setCreated() - добавляем часовой
+     * пояс выбраный пользователемстроковый
+     * (строковый ID - zone).
      *
      * @param task
      * @return String
@@ -95,7 +106,7 @@ public class TaskController {
     public String createTask(@RequestParam("categoryId") List<Integer> categoryId,
                              @RequestParam("priorityId") int priorityId,
                              @ModelAttribute Task task, HttpSession session) {
-        task.setUser((User) session.getAttribute("user"));
+        User user = (User) session.getAttribute("user");
         for (Integer id : categoryId) {
             var category = taskService.findCategoryById(id)
                     .orElseThrow(() -> {
@@ -108,6 +119,8 @@ public class TaskController {
                     return new NoSuchElementException("Priority not found with id" + priorityId);
                 });
         task.setPriority(priority);
+        task.setCreated(LocalDateTime.now());
+        task.setUser(user);
         taskService.addTask(task);
         return "redirect:/all";
     }

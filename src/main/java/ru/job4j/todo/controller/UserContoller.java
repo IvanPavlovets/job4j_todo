@@ -3,13 +3,16 @@ package ru.job4j.todo.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
+import java.util.*;
 
 import static ru.job4j.todo.utils.UserUtils.getUserSession;
 
@@ -29,6 +32,7 @@ public class UserContoller {
      * предупрежения alert в предсавлении
      * на тот случай когда вернеться
      * пустой Optional в условии.
+     *
      * @param model
      * @param fail
      * @return String
@@ -50,6 +54,7 @@ public class UserContoller {
      * с помощью setAttribute().
      * При возврате пустого Optional у параметра fail
      * значение поменяеться на true и переход на loginPage.
+     *
      * @param user
      * @param req
      * @return String
@@ -71,6 +76,7 @@ public class UserContoller {
      * Обработки нажатия ссылки "Выход"
      * Удаляет все данные связанные с текущем пользователем
      * и завершает текущую сессию.
+     *
      * @param session
      * @return String
      */
@@ -86,6 +92,7 @@ public class UserContoller {
      * предупрежения alert в предсавлении
      * на тот случай когда вернеться
      * пустой Optional в условии.
+     *
      * @param model
      * @return String
      */
@@ -93,6 +100,7 @@ public class UserContoller {
     public String addUser(Model model, @RequestParam(name = "fail", required = false) Boolean fail) {
         model.addAttribute("fail", fail != null);
         model.addAttribute("user", new User());
+        model.addAttribute("zones", TimeZone.getAvailableIDs());
         return "addUser";
     }
 
@@ -104,11 +112,17 @@ public class UserContoller {
      * В условии проверка на пустой Optional
      * - При возврате пустого Optional у параметра fail
      * значение поменяеться на true и переход на formAddUser.
+     * Пользователю устанавливаем выбранный
+     * часовой пояс
+     *
+     *
      * @param user
      * @return String
      */
     @PostMapping("/registration")
-    public String registration(@ModelAttribute User user) {
+    public String registration(@RequestParam("timeZoneID") String zoneId,
+                               @ModelAttribute User user) {
+        user.setZone(zoneId);
         Optional<User> regUser = userService.addUser(user);
         if (regUser.isEmpty()) {
             return "redirect:/formAddUser?fail=true";
@@ -118,6 +132,7 @@ public class UserContoller {
 
     /**
      * Обрабатывает переход на страницу personalInfo.html
+     *
      * @param model
      * @param session
      * @return String
@@ -133,6 +148,7 @@ public class UserContoller {
      * Метод перехода на обновления карточки
      * пользователя. Передаються параметры
      * выбранные ранее name, login, password.
+     *
      * @param fail
      * @return String
      */
@@ -143,17 +159,23 @@ public class UserContoller {
         model.addAttribute("fail", fail != null);
         model.addAttribute("user", user);
         model.addAttribute("editUser", user);
+        model.addAttribute("zones", TimeZone.getAvailableIDs());
         return "updateUser";
     }
 
     /**
      * Метод обработки изменений в карточки пользователя
+     * Измененному пользователю устанавливаем выбранный
+     * часовой пояс
+     *
      * @param user
      * @param req
      * @return String
      */
     @PostMapping("/updateUser")
-    public String updateUser(@ModelAttribute User user, HttpServletRequest req) {
+    public String updateUser(@RequestParam("timeZoneID") String zoneId,
+            @ModelAttribute User user, HttpServletRequest req) {
+        user.setZone(zoneId);
         if (!userService.updateUser(user.getId(), user)) {
             return "redirect:/formUpdateUser?fail=true";
         }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.EqualsAndHashCode.Include;
 
 import javax.persistence.*;
+import java.util.TimeZone;
 
 @Entity
 @Table(name = "todo_user")
@@ -18,5 +19,6 @@ public class User {
     private String name;
     private String login;
     private String password;
+    private String zone = TimeZone.getDefault().getID();
 
 }

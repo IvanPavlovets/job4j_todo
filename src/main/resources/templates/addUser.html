@@ -43,8 +43,16 @@
                         <label for="password">Пороль</label>
                         <input type="text" class="form-control" name="password" id="password" placeholder="Введите пороль">
                     </div>
-                    <button type="submit" class="btn btn-primary">Зарегистрировать</button>
-                    <a class="btn btn-danger" th:href="@{/loginPage}" role="button">Отмена</a>
+                    <div class="form-group">
+                        <label for="timeZoneID">Часовой пояс</label>
+                        <select class="form-control" id="timeZoneID" name="timeZoneID">
+                            <option th:each="zone : ${zones}"
+                                    th:text="${zone}">
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Зарегистрировать</button>
+                    <a class="btn btn-danger mt-3" th:href="@{/loginPage}" role="button">Отмена</a>
                 </form>
             </div>
         </div>

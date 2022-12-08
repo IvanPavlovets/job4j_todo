@@ -23,7 +23,7 @@
     <div class="row pt-3">
         <div class="card" style="width: 70%">
             <div class="card-header">
-                Регистрация
+                Обновление личных данных
             </div>
             <div class="card-body">
                 <div th:if="${fail}" class="alert alert-danger" role="alert">
@@ -43,8 +43,16 @@
                         <label for="password">Пароль</label>
                         <input type="text" class="form-control" name="password" id="password" th:field="*{password}" placeholder="Введите пароль">
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                    <a class="btn btn-danger" th:href="@{/personlInfo}" role="button">Отмена</a>
+                    <div class="form-group">
+                        <label for="timeZoneID">Часовой пояс</label>
+                        <select class="form-control" id="timeZoneID" name="timeZoneID">
+                            <option th:each="zone : ${zones}"
+                                    th:text="${zone}">
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                    <a class="btn btn-danger mt-3" th:href="@{/personlInfo}" role="button">Отмена</a>
                 </form>
             </div>
         </div>

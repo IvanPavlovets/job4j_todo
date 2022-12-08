@@ -72,11 +72,13 @@ public class UserStore {
                     session -> session.createQuery("UPDATE User as u SET"
                             + " u.name = :fName,"
                             + " u.login = :fLogin,"
-                            + " u.password = :fPassword"
+                            + " u.password = :fPassword,"
+                            + " u.zone = :fZone"
                             + " WHERE u.id = :fId")
                             .setParameter("fName", user.getName())
                             .setParameter("fLogin", user.getLogin())
                             .setParameter("fPassword", user.getPassword())
+                            .setParameter("fZone", user.getZone())
                             .setParameter("fId", id)
                             .executeUpdate() > 0
             );

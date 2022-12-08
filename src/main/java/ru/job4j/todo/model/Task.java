@@ -18,7 +18,7 @@ public class Task {
     @EqualsAndHashCode.Include
     private int id;
     private String description;
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime created;
     private boolean done = false;
 
     @ManyToOne
