@@ -11,8 +11,10 @@ import ru.job4j.todo.service.TaskService;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.TimeZone;
 
 import static ru.job4j.todo.utils.UserUtils.getUserSession;
 
@@ -38,10 +40,12 @@ public class TaskController {
         User user = getUserSession(session);
         model.addAttribute("user", user);
         List<Task> tasks = taskService.findAllTasks();
-        tasks.forEach(task -> task.getCreated().atZone(ZoneId.of(user.getZone())));
+        String zoneId = user.getZone();
+        tasks.forEach(task -> task.setCreated(task.getCreated().withZoneSameInstant(ZoneId.of(zoneId))));
         model.addAttribute("tasks", tasks);
         return "all";
     }
+
 
     /**
      * Обрабатывает переход на done.html
@@ -54,7 +58,8 @@ public class TaskController {
         User user = getUserSession(session);
         model.addAttribute("user", user);
         List<Task> tasks = taskService.findCompletedTask();
-        tasks.forEach(task -> task.getCreated().atZone(ZoneId.of(user.getZone())));
+        String zoneId = user.getZone();
+        tasks.forEach(task -> task.setCreated(task.getCreated().withZoneSameInstant(ZoneId.of(zoneId))));
         model.addAttribute("tasks", tasks);
         return "done";
     }
@@ -70,7 +75,8 @@ public class TaskController {
         User user = getUserSession(session);
         model.addAttribute("user", user);
         List<Task> tasks = taskService.findNotCompletedTask();
-        tasks.forEach(task -> task.getCreated().atZone(ZoneId.of(user.getZone())));
+        String zoneId = user.getZone();
+        tasks.forEach(task -> task.setCreated(task.getCreated().withZoneSameInstant(ZoneId.of(zoneId))));
         model.addAttribute("tasks", taskService.findNotCompletedTask());
         return "notDone";
     }
@@ -119,7 +125,6 @@ public class TaskController {
                     return new NoSuchElementException("Priority not found with id" + priorityId);
                 });
         task.setPriority(priority);
-        task.setCreated(LocalDateTime.now());
         task.setUser(user);
         taskService.addTask(task);
         return "redirect:/all";
