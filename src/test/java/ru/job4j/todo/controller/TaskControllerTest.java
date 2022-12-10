@@ -3,6 +3,7 @@ package ru.job4j.todo.controller;
 import org.junit.Test;
 import org.springframework.ui.Model;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
@@ -24,7 +25,8 @@ public class TaskControllerTest {
         Model model = mock(Model.class);
         TaskService taskService = mock(TaskService.class);
         HttpSession session = mock(HttpSession.class);
-        when(taskService.findAllTasks()).thenReturn(tasks);
+        User user = mock(User.class);
+        when(taskService.findAllTasks(user.getZone())).thenReturn(tasks);
         TaskController taskController = new TaskController(taskService);
         String page = taskController.all(model, session);
         verify(model).addAttribute("tasks", tasks);

@@ -9,8 +9,10 @@ import ru.job4j.todo.store.CategoryStore;
 import ru.job4j.todo.store.PriorityStore;
 import ru.job4j.todo.store.TaskStore;
 
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +28,7 @@ public class TaskService {
     /**
      * Создание задания.
      * Метод добавляет task в БД
+     *
      * @param task
      * @return Task
      */
@@ -37,6 +40,7 @@ public class TaskService {
      * Обновляет запись в БД.
      * Поля старой записи по id меняеться на
      * поля из переданого task.
+     *
      * @param task
      */
     public void updateTask(int id, Task task) {
@@ -46,6 +50,7 @@ public class TaskService {
     /**
      * Переводит task в состояние выполнено
      * путем замены флага в done, на true.
+     *
      * @param id
      */
     public void completeTask(int id) {
@@ -54,6 +59,7 @@ public class TaskService {
 
     /**
      * Удаление Task по id.
+     *
      * @param id
      */
     public void deleteTask(int id) {
@@ -61,31 +67,54 @@ public class TaskService {
     }
 
     /**
-     * Достает все значения из хранилища (БД)
-     * @return List<Task>
+     * Внутриний метод сдвига временой зоны.
+     * @param tasks
      */
-    public List<Task> findAllTasks() {
-        return taskStore.findAll();
+    private void shiftZone(List<Task> tasks, String zoneId) {
+        tasks.forEach(
+                task -> task.setCreated(
+                        task.getCreated().atZone(TimeZone.getDefault().toZoneId())
+                                .withZoneSameInstant(ZoneId.of(zoneId)).toLocalDateTime()
+                )
+        );
     }
 
     /**
      * Достает все task c флагом true
+     *
      * @return List<Task>
      */
-    public List<Task> findCompletedTask() {
-        return taskStore.findCompleted();
+    public List<Task> findCompletedTask(String zoneId) {
+        List<Task> tasks = taskStore.findCompleted();
+        shiftZone(tasks, zoneId);
+        return tasks;
+    }
+
+    /**
+     * Достает все значения из хранилища (БД)
+     *
+     * @return List<Task>
+     */
+    public List<Task> findAllTasks(String zoneId) {
+        List<Task> tasks = taskStore.findAll();
+        shiftZone(tasks, zoneId);
+        return tasks;
     }
 
     /**
      * Достает все task c флагом false
+     *
      * @return List<Task>
      */
-    public List<Task> findNotCompletedTask() {
-        return taskStore.findNotCompleted();
+    public List<Task> findNotCompletedTask(String zoneId) {
+        List<Task> tasks = taskStore.findNotCompleted();
+        shiftZone(tasks, zoneId);
+        return tasks;
     }
 
     /**
      * Находит запись в БД по id
+     *
      * @param id
      * @return Optional<Task>
      */
@@ -95,6 +124,7 @@ public class TaskService {
 
     /**
      * Достает все Category из таблицы categories
+     *
      * @return List<Category>
      */
     public List<Category> findAllCategories() {
@@ -103,6 +133,7 @@ public class TaskService {
 
     /**
      * Находит category в БД по id
+     *
      * @param id
      * @return Optional<Category>
      */
@@ -112,6 +143,7 @@ public class TaskService {
 
     /**
      * Находит Priority в БД по id
+     *
      * @param id
      * @return Optional<Priority>
      */
@@ -121,6 +153,7 @@ public class TaskService {
 
     /**
      * Достает все Priority из таблицы priorities
+     *
      * @return
      */
     public List<Priority> findAllPriorities() {

@@ -9,12 +9,8 @@ import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.TimeZone;
 
 import static ru.job4j.todo.utils.UserUtils.getUserSession;
 
@@ -39,10 +35,7 @@ public class TaskController {
     public String all(Model model, HttpSession session) {
         User user = getUserSession(session);
         model.addAttribute("user", user);
-        List<Task> tasks = taskService.findAllTasks();
-        String zoneId = user.getZone();
-        tasks.forEach(task -> task.setCreated(task.getCreated().withZoneSameInstant(ZoneId.of(zoneId))));
-        model.addAttribute("tasks", tasks);
+        model.addAttribute("tasks", taskService.findAllTasks(user.getZone()));
         return "all";
     }
 
@@ -57,10 +50,7 @@ public class TaskController {
     public String done(Model model, HttpSession session) {
         User user = getUserSession(session);
         model.addAttribute("user", user);
-        List<Task> tasks = taskService.findCompletedTask();
-        String zoneId = user.getZone();
-        tasks.forEach(task -> task.setCreated(task.getCreated().withZoneSameInstant(ZoneId.of(zoneId))));
-        model.addAttribute("tasks", tasks);
+        model.addAttribute("tasks", taskService.findCompletedTask(user.getZone()));
         return "done";
     }
 
@@ -74,10 +64,7 @@ public class TaskController {
     public String notDone(Model model, HttpSession session) {
         User user = getUserSession(session);
         model.addAttribute("user", user);
-        List<Task> tasks = taskService.findNotCompletedTask();
-        String zoneId = user.getZone();
-        tasks.forEach(task -> task.setCreated(task.getCreated().withZoneSameInstant(ZoneId.of(zoneId))));
-        model.addAttribute("tasks", taskService.findNotCompletedTask());
+        model.addAttribute("tasks", taskService.findNotCompletedTask(user.getZone()));
         return "notDone";
     }
 

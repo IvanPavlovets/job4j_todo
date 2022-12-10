@@ -4,11 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TimeZone;
 
 @Entity
 @Table(name = "tasks")
@@ -20,7 +18,7 @@ public class Task {
     @EqualsAndHashCode.Include
     private int id;
     private String description;
-    private ZonedDateTime created = ZonedDateTime.now(ZoneId.of(TimeZone.getDefault().getID()));
+    private LocalDateTime created = LocalDateTime.now();
     private boolean done = false;
 
     @ManyToOne
@@ -41,4 +39,11 @@ public class Task {
     )
     private Set<Category> categories = new HashSet<>();
 
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
 }
