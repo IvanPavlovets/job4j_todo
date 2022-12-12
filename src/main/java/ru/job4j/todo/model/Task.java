@@ -39,11 +39,4 @@ public class Task {
     )
     private Set<Category> categories = new HashSet<>();
 
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
 }

@@ -63,6 +63,7 @@ public class CrudRepository {
     public <T> List<T> query(String query, Class<T> cl) {
         Function<Session, List<T>> command = session -> session
                 .createQuery(query, cl)
+                .setHint(QueryHints.PASS_DISTINCT_THROUGH, false)
                 .list();
         return tx(command);
     }
@@ -111,6 +112,7 @@ public class CrudRepository {
             for (Map.Entry<String, Object> arg : args.entrySet()) {
                 sq.setParameter(arg.getKey(), arg.getValue());
             }
+            sq.setHint(QueryHints.PASS_DISTINCT_THROUGH, false);
             return sq.list();
         };
         return tx(command);
